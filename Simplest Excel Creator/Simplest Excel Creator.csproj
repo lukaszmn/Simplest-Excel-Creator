@@ -31,8 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ITLN.Utils">
+      <HintPath>..\..\ITLN-Utils\ITLN Win Utils\bin\Debug\ITLN.Utils.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,7 +45,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExcelGenerator.cs" />
+    <Compile Include="Generator\EditedFile.cs" />
+    <Compile Include="Generator\ExcelColumn.cs" />
+    <Compile Include="Generator\SharedStringsGenerator.cs" />
+    <Compile Include="Generator\Zipper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Generator\SheetGenerator.cs" />
+    <Compile Include="Utils\ObjectExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="template\xl\worksheets\sheet1.xml" />
+    <Content Include="template\docProps\app.xml" />
+    <Content Include="template\docProps\core.xml" />
+    <Content Include="template\xl\sharedStrings.xml" />
+    <Content Include="template\xl\styles.xml" />
+    <Content Include="template\xl\theme\theme1.xml" />
+    <Content Include="template\xl\workbook.xml" />
+    <Content Include="template\[Content_Types].xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="template\xl\_rels\workbook.xml.rels" />
+    <None Include="template\_rels\.rels" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)template\*" "$(ProjectDir)$(OutDir)template\" /E</PostBuildEvent>
+  </PropertyGroup>
 </Project>
