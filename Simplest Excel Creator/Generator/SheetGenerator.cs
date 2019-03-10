@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using ITLN.SimplestExcelCreator.Utils;
 
@@ -82,19 +83,30 @@ namespace ITLN.SimplestExcelCreator.Generator {
 
 
 		private void setColumn(int row, int column, object val) {
+			Debug.Assert(val != null);
+
 			string columnName = ExcelColumn.GetName(column + 1);
 			string cellRef = columnName + (row + 1);
 
-			// TODO parse date: <c r="A2" s="1"><v>42248</v></c>
-			// TODO parse percentage: <c r="A5" s="2"><v>0.05</v></c>
+			// TODO parse date: <c r="A2" s="2"><v>42248</v></c>
 
-			if (val.IsNumeric()) {
-				// TODO use invariant conversion
-				string valString = val.ToString().Replace(',', '.');
+			string valS = val.ToString();
+
+			if (valS.EndsWith("%") && valS.Substring(0, valS.Length - 1).IsNumeric(out decimal? perc)) {
+				// percentage
+				// TODO: please note these values will be displayed with 0 decimal points (though they will be stored in cell)
+				string valString = (perc.Value / 100).ToString(CultureInfo.InvariantCulture);
+				rows.Append($"<c r=\"{cellRef}\" s=\"1\"><v>{valString}</v></c>");
+
+			} else if (val.IsNumeric()) {
+				// these steps are necessary to convert decimal packed in an object to an invariant string
+				decimal dec = Convert.ToDecimal(val, CultureInfo.InvariantCulture);
+				string valString = dec.ToString(CultureInfo.InvariantCulture);
 				rows.Append($"<c r=\"{cellRef}\"><v>{valString}</v></c>");
+
 			} else {
 				rows.Append($"<c r=\"{cellRef}\" t=\"s\"><v>{stringsGenerator.NextIndex}</v></c>");
-				stringsGenerator.Add(val.ToString());
+				stringsGenerator.Add(valS);
 			}
 		}
 
