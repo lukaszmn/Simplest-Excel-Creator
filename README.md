@@ -16,6 +16,27 @@ Should you require other features, feel free to extend this library or find a mo
 The usage is very simple: `ExcelGenerator.Generate(data, path)`, where *data* stores two-dimensional information about values for cells
 and *path* is the full path to the XLSX file that should be written.
 
+For instance, providing:
+```
+object[,] data = {
+	{ null, null },
+	{ "val 1", null },
+	{ null, 3 },
+	{ null, 9.3 },
+	{ "15%", "12.3%" }
+};
+```
+will generate the following Excel worksheet:
+
+|     |   A   |   B   |
+|-----|------:|------:|
+|**1**|       |       |
+|**2**| val 1 |       |
+|**3**|       |     3 |
+|**4**|       |   9.3 |
+|**5**|   15% | 12.3% |
+
+
 ## Reference
 
 Some documentation on the Open XML format can be found at
