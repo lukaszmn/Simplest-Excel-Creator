@@ -1,0 +1,1 @@
+﻿Before starting, copy *template* folder from the lib to *bin\Debug*.
